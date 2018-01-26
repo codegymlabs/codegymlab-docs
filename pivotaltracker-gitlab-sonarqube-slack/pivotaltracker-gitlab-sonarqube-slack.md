@@ -20,7 +20,7 @@ I. Tích hợp Gitllab/SonarQube
 
 SonarQube là một nền tảng thanh soát chất lượng mã nguồn, hoạt động theo mô hình Client/Server. Việc thanh soát diễn ra ở client (máy của học viên, máy Runner của hệ thống CI,...) và báo cáo được gửi lên và kiểm soát tập trung ở SonarQube Server. Chi tiết về kiến trúc này có thể tham khảo tại đường dẫn `https://docs.sonarqube.org/display/SONAR/Architecture+and+Integration`.
 
-![](./images/01.png)
+![](./images/01.png){ width=100% }
 
 Tài liệu này sẽ hướng dẫn dùng Gitlab builtin CI để thực hiện việc thanh soát. Kết quả sẽ được gửi lên một SonarQube Server được xây dựng sẵn.
 
@@ -99,7 +99,7 @@ SQ Server hiện tại không cho phép đặt quyền trên từng user, các q
 
 Dưới đây là một mẫu thiết đặt cho Default Permission Template. Giáo viên hay quản trị viên có thể tạo nhiều group users để đặt quyền cho học viên trên từng project một.
 
-![](./images/02.png)
+![](./images/02.png){ width=100% }
 
 ##### c. Chuẩn bị Gitlab CI Runner
 
@@ -130,7 +130,7 @@ Giáo viên hay quản trị viên cần tạo cho học viên một tài khoả
 
 Học viên cần gửi registration token của repository của mình về cho quản trị viên hay giáo viên (giáo viên cũng có thể tự vào gitlab để xem).
 
-![](./images/03.png)
+![](./images/03.png){ width=100% }
 
 Token này sẽ được sử dụng để đăng ký runner cho repository. Tại máy tính đang chạy docker container của runner, chạy câu lệnh sau đây, với `$RUNNER_NAME` là tên tùy ý của docker container, và `$TOKEN` bằng giá trị thật:
 
@@ -156,7 +156,7 @@ SonarQube Scanner là một chương trình viết bằng ngôn ngữ Java, do �
 
 Sau khi cài đặt JDK, mở cmd (hoặc một shell session trên linux/unix) và dùng lệnh `java -version` để kiểm tra. Nếu kết quả tương tự như dưới đây thì bạn đã sẵn sàng cho bước tiếp theo: 
 
-![](./images/04.png)
+![](./images/04.png){ width=100% }
 
 Download công cụ SonarQube Scanner tại đường dẫn `https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner`. Chọn một thư mục để giải nén vào, tạm gọi là `$INSTALL_DIR`. Ở bước tiếp theo ta cần nạp sonar-scanner vào `PATH` của hệ thống.
 
@@ -164,19 +164,19 @@ Download công cụ SonarQube Scanner tại đường dẫn `https://docs.sonarq
 
 Mở cửa sổ cấu hình môi trường của Windows theo hướng dẫn trong hình dưới:
 
-![](./images/05.png)
+![](./images/05.png){ width=100% }
 
 Giả sử bạn giải nén file zip thành thư mục `C:\sonar-scanner`. Bấm nút B1 và thêm biến môi trường `SONAR_DIR` như hình dưới:
 
-![](./images/06.png)
+![](./images/06.png){ width=100% }
 
 Kiểm tra ở panel User variables, nếu có sẵn biến môi trường `Path` thì nhấn B3, nếu không có, nhấn B2. Điền thêm giá trị `;%SONAR_DIR%\bin;` (lưu ý dấu chấm phẩy):
 
-![](./images/07.png)
+![](./images/07.png){ width=100% }
 
 Bấm OK trên các hộp thoại. Khởi động lại máy tính, mở cmd và chạy thử câu lệnh sau để xác nhận rằng `sonar-scanner` đã có thể hoạt động (kết quả thực thi thường là `FAILED`, nhưng ít nhất nó xác nhận rằng bạn đã đưa `sonar-scanner` vào môi trường của hệ thống thành công):
 
-![](./images/08.png)
+![](./images/08.png){ width=100% }
 
 ##### b. Trên Linux/Unix
 
@@ -190,13 +190,13 @@ export PATH="$PATH:"sonar-scanner-macosx/bin"
 
 Khởi động lại máy tính, mở terminal và chạy thử câu lệnh sau để xác nhận rằng sonar-scanner đã có thể hoạt động (kết quả thực thi thường là `FAILED`, nhưng ít nhất nó xác nhận rằng bạn đã đưa sonar-scanner vào môi trường của hệ thống thành công):
 
-![](./images/09.png)
+![](./images/09.png){ width=100% }
 
 #### 2. Gửi Gitlab Repository CI Token cho giáo viên/quản trị viên để đăng ký CI Runner
 
 Với stack này, việc chạy sonarqube scanner được thực hiện tự động bởi Gitlab CI Runner. Để đăng ký gitlab repository với một runner, giáo viên/quản trị viên cần có mã token được tạo ra bởi gitlab. Học viên có thể truy cập panel như dưới đây để lấy mã này và gửi cho giáo viên/quản trị viên:
 
-![](./images/03.png)
+![](./images/03.png){ width=100% }
 
 ##### a. Đặc tả nhiệm vụ cho Gitlab CI Runner
 
@@ -273,17 +273,17 @@ Lưu ý: việc trao token này cho Gitlab sẽ làm cho Gitlab Webhook có toà
 
 Token API của PivotalTracker có thể được truy cập ở mục profile: `https://www.pivotaltracker.com/profile`
 
-![](./images/10.png)
+![](./images/10.png){ width=100% }
 
 #### 2. Khai báo Token API cho PivotalTracker Gitlab Webhook
 
 Tạo ra PivotalTracker Webhook bằng cách vào Project Settings ở Gitlab:
 
-![](./images/11.png)
+![](./images/11.png){ width=100% }
 
 Nhập API Token vào cho Webhook và active Webhook lên. Mặc định cho Webhook lắng nghe trên tất cả các branch:
 
-![](./images/12.png)
+![](./images/12.png){ width=100% }
 
 Nhấn Test & Save để xác nhận rằng Webhook đã hoạt động.
 
@@ -294,21 +294,21 @@ Nếu có một commit có message tuân thủ cú pháp `"<nội dung bất k�
 
 Ví dụ, với story như sau:
 
-![](./images/13.png)
+![](./images/13.png){ width=100% }
 
 Commit có message như sau đây đã được log lên activities:
 
-![](./images/14.png)
+![](./images/14.png){ width=100% }
 
 Nếu có một commit có message tuân thủ cú pháp `"<nội dung bất kỳ>[(Finishes|Fixes|Delivers) #TRACKER_STORY_ID]"` được push lên, Webhook sẽ tự động chuyển issue/feature/story có id là `#TRACKER_STORY_ID` sang trạng thái kế tiếp của `Finishes|Fixes|Delivers`.
 
 Ví dụ, với story trên, commit có nội dung như sau:
 
-![](./images/15.png)
+![](./images/15.png){ width=100% }
 
 ...sẽ đưa issue sang trạng thái kế tiếp của trạng thái Finishes:
 
-![](./images/16.png)
+![](./images/16.png){ width=100% }
 
 Lưu ý: đối với PivotalTracker, trạng thái của issue/feature/story chỉ có ý nghĩa khi issue/featue/story đó đã được “Start”. Luật tương tự cũng được áp dụng cho Webhook. Do đó, các message mang `#TRACKER_STORY_ID` chỉ có ý nghĩa trên những story đã được Started.
 
@@ -333,23 +333,23 @@ Cần chuẩn bị trước một chanel để các dịch vụ bên thứ ba s�
 
 Vào trang customize của Slack Workspace, truy cập vào thư viện Apps của Slack bằng cách nhấn button “Browse”:
 
-![](./images/17.png)
+![](./images/17.png){ width=100% }
 
 Tại màn hình Apps, tìm tới app _Incoming Webhooks_:
 
-![](./images/18.png)
+![](./images/18.png){ width=100% }
 
 Danh sách các webhooks đang hoạt động sẽ hiện ra, để tạo một webhooks mới, nhấn “Add Configuration”:
 
-![](./images/19.png)
+![](./images/19.png){ width=100% }
 
 Chỉ định chanel mà webhook này sẽ hoạt động:
 
-![](./images/20.png)
+![](./images/20.png){ width=100% }
 
 Sau khi submit, lấy URL đã được tạo ra để mang đi cấu hình cho dịch vụ của bên thứ ba:
 
-![](./images/21.png)
+![](./images/21.png){ width=100% }
 
 Lưu ý: tại thời điểm viết tài liệu này, Slack Incoming Webhook được tạo ra cho một chanel xác định, nhưng các dịch vụ bên thứ ba lại vẫn có thể dùng URL của webhook đó để post lên bất kỳ chanel nào của workspace Slack (tùy thuộc vào việc dịch vụ đó có làm thế, và có cho phép người dùng cấu hình chanel hay không). Trong tương lai điều này có thể thay đổi.
 
@@ -357,7 +357,7 @@ Lưu ý: tại thời điểm viết tài liệu này, Slack Incoming Webhook đ
 
 Ít nhất nên tùy chỉnh tên hiển thị cho webhook này để dễ quản lý, có thể tùy chỉnh cả ảnh avatar sẽ được dùng cho notifications từ dịch vụ bên thứ ba:
 
-![](./images/22.png)
+![](./images/22.png){ width=100% }
 
 Tham khảo thêm về imcoming webhooks tại `https://api.slack.com/incoming-webhooks/`
 
@@ -365,15 +365,15 @@ Tham khảo thêm về imcoming webhooks tại `https://api.slack.com/incoming-w
 
 Đăng nhập SonarQube Server bằng tài khoản có quyền admin, mở panel “Administration/Configuration/General”, xác nhận rằng cấu hình `Base URL` đã được thiết đặt (ví dụ: `https://sonarqube.codegym.vn`):
 
-![](./images/23.png)
+![](./images/23.png){ width=100% }
 
 Mở panel “Administration/Configuration/Slack”, enable plugin, nhập Slack Incoming Webhook URL, alias cho user sẽ post notifications, cấu hình Slack Chanel sẽ dùng để post notifications cho các project tương ứng (theo project key), lưu thiết lập lại:
 
-![](./images/24.png)
+![](./images/24.png){ width=100% }
 
 Kết quả của việc cấu hình này là một notifications sẽ được post lên chanel đã được cấu hình, mỗi khi sonar-scanner thực hiện thành công một lần scan:
 
-![](./images/25.png)
+![](./images/25.png){ width=100% }
 
 IV. Tích hợp PivotalTracker/Slack
 ---
@@ -386,35 +386,35 @@ Các bước thực hiện bao gồm cài đặt app “Pivotal Tracker” vào 
 
 Vào trang customize của Slack Workspace, truy cập vào thư viện Apps của Slack bằng cách nhấn button “Browse”:
 
-![](./images/17.png)
+![](./images/17.png){ width=100% }
 
 Tại màn hình Apps, tìm tới app Pivotal Tracker:
 
-![](./images/26.png)
+![](./images/26.png){ width=100% }
 
 Danh sách các PivotalTracker integrations đang hoạt động sẽ hiện ra, nếu muốn tạo một integration mới, nhấn “Add Configuration”:
 
-![](./images/27.png)
+![](./images/27.png){ width=100% }
 
 Chỉ định chanel mà các notifications sẽ được post vào:
 
-![](./images/28.png)
+![](./images/28.png){ width=100% }
 
 Chỉ định tên và ảnh hiển thi cho các post của integration này:
 
-![](./images/29.png)
+![](./images/29.png){ width=100% }
 
 Lấy Webhook URL và sang bước tiếp theo:
 
-![](./images/21.png)
+![](./images/21.png){ width=100% }
 
 
 ### B. Khai báo Webhook URL cho PivotalTracker Project
 
 Tại PivotalTracker, vào project Settings/Webhook, nhập Webhook URL đã có ở bước trước vào, chỉ định API v5, và nhấn lưu:
 
-![](./images/30.png)
+![](./images/30.png){ width=100% }
 
 Kết quả của việc này là một message sẽ được post lên chanel chỉ định mỗi khi có sự thay đổi trạng thái trên PivotalTracker Project:
 
-![](./images/31.png)
+![](./images/31.png){ width=100% }
