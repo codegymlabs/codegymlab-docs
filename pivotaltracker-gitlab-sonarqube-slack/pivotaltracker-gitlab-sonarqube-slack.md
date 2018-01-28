@@ -1,13 +1,20 @@
 CodeGym Lab Stack: PivotalTracker, Gitlab, SonarQube, Slack
 ===
 
-*Stack này bao gồm PivotalTracker như công cụ quản lý dự án, Gitlab như công cụ quản lý mã nguồn, SonarQube như công cụ thanh soát mã nguồn, và Slack như kênh giao tiếp.*
+*Stack này bao gồm PivotalTracker như công cụ quản lý dự án, Gitlab như công cụ quản lý 
+mã nguồn, SonarQube như công cụ thanh soát mã nguồn, và Slack như kênh giao tiếp.*
 
 Stack này thực hiện những những hoạt động sau:
 
-- Khi dev thực hiện hành động push, mã sẽ được thanh soát bởi SonarQube thông qua Gitlab CI. Kết quả sẽ tự động được đăng vào Slack.
-- Khi một commit có message được viết theo quy ước định trước để thông báo về việc issue/feature nào đó sau commit này sẽ đổi trạng thái, issue/feature tương ứng ở pivotal tracker sẽ được tự động đổi trạng thái theo. Kết quả sẽ được tự động đăng vào Slack. Thường thì team sẽ đặt quy ước rằng commit merge branch sẽ được đặt message theo quy ước này.
-- Các report được gửi lên SonarQube server sẽ được thông báo vào một chanel xác định trong Slack Workspace
+- Khi dev thực hiện hành động push, mã sẽ được thanh soát bởi SonarQube thông qua Gitlab 
+CI. Kết quả sẽ tự động được đăng vào Slack.
+- Khi một commit có message được viết theo quy ước định trước để thông báo về việc 
+issue/feature nào đó sau commit này sẽ đổi trạng thái, issue/feature tương ứng ở pivotal 
+tracker sẽ được tự động đổi trạng thái theo. Kết quả sẽ được tự động đăng vào Slack. 
+Thường thì team sẽ đặt quy ước rằng commit merge branch sẽ được đặt message theo quy ước 
+này.
+- Các report được gửi lên SonarQube server sẽ được thông báo vào một chanel xác định 
+trong Slack Workspace
 - Các thay đổi trạng thái trên PivotalTracker Project sẽ được thông báo vào một chanel xác định trong Slack Workspace
 - Việc tích hợp Gitlab với Slack không được khuyến khích trong Stack này vì sẽ gây ra dư thừa notifications.
 

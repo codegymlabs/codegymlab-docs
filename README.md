@@ -2,25 +2,49 @@
 
 # Install Basic Latex
 
+<strike>
 Get mactex-basic.pkg from `http://www.ctan.org/pkg/mactex-basic`
 
 Click `mactex-basic.pkg` to install LaTeX.
 
-Update tlmgr:
+Update `tlmgr`:
 
 ```sudo tlmgr update --self```
 
-Install the following tools via tlmgr:
+Install the following tools via `tlmgr`:
 ```
 bash
 sudo tlmgr install ucharcat
 sudo tlmgr install collection-fontsrecommended
 ```
+</strike>
+
+Use `https://hub.docker.com/r/codegymlabs/pandoc/` instead:
+
+```bash
+docker pull codegymlabs/pandoc
+```
 
 # Build
 
+Change working directory to document's parent:
+
 ```bash
-pandoc --pdf-engine=xelatex -V papersize:a4 -o o.pdf --dpi $dpi $file
+cd pivotaltracker-gitlab-sonarqube-slack
 ```
 
-`$dpi` in `72|96|144`
+Run `build.sh` or: 
+
+```bash
+docker run --rm \
+  -v $PWD:/docs \
+  -v $PWD/outs:/docs/out \
+  codegymlabs/pandoc:pdf \
+  pivotaltracker-gitlab-sonarqube-slack.md \
+  -o out/o.pdf \
+  -V papersize:a4 \
+  --latex-engine=xelatex \
+  --dpi=144
+```
+
+DPI in `72|96|144`
