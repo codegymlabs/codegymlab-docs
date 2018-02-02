@@ -1,20 +1,21 @@
-CodeGym Lab Stack: PivotalTracker, Gitlab, SonarQube, Slack
-===
+---
+title: CodeGym Lab Stack - PivotalTracker, Gitlab, SonarQube, Slack
+author: Codegymlabs
+---
+
+\pagebreak
 
 *Stack này bao gồm PivotalTracker như công cụ quản lý dự án, Gitlab như công cụ quản lý 
 mã nguồn, SonarQube như công cụ thanh soát mã nguồn, và Slack như kênh giao tiếp.*
 
 Stack này thực hiện những những hoạt động sau:
 
-- Khi dev thực hiện hành động push, mã sẽ được thanh soát bởi SonarQube thông qua Gitlab 
-CI. Kết quả sẽ tự động được đăng vào Slack.
-- Khi một commit có message được viết theo quy ước định trước để thông báo về việc 
-issue/feature nào đó sau commit này sẽ đổi trạng thái, issue/feature tương ứng ở pivotal 
-tracker sẽ được tự động đổi trạng thái theo. Kết quả sẽ được tự động đăng vào Slack. 
-Thường thì team sẽ đặt quy ước rằng commit merge branch sẽ được đặt message theo quy ước 
+![](./images/00.png){ width=100% }
+
+- Khi dev thực hiện hành động push, mã sẽ được thanh soát bởi SonarQube thông qua Gitlab CI. Kết quả sẽ tự động được đăng vào Slack.
+- Khi một commit có message được viết theo quy ước định trước để thông báo về việc issue/feature nào đó sau commit này sẽ đổi trạng thái, issue/feature tương ứng ở pivotal tracker sẽ được tự động đổi trạng thái theo. Kết quả sẽ được tự động đăng vào Slack. Thường thì team sẽ đặt quy ước rằng commit merge branch sẽ được đặt message theo quy ước 
 này.
-- Các report được gửi lên SonarQube server sẽ được thông báo vào một chanel xác định 
-trong Slack Workspace
+- Các report được gửi lên SonarQube server sẽ được thông báo vào một chanel xác định trong Slack Workspace.
 - Các thay đổi trạng thái trên PivotalTracker Project sẽ được thông báo vào một chanel xác định trong Slack Workspace
 - Việc tích hợp Gitlab với Slack không được khuyến khích trong Stack này vì sẽ gây ra dư thừa notifications.
 
@@ -25,7 +26,7 @@ I. Tích hợp Gitllab/SonarQube
 
 #### 1. Mô tả
 
-SonarQube là một nền tảng thanh soát chất lượng mã nguồn, hoạt động theo mô hình Client/Server. Việc thanh soát diễn ra ở client (máy của học viên, máy Runner của hệ thống CI,...) và báo cáo được gửi lên và kiểm soát tập trung ở SonarQube Server. Chi tiết về kiến trúc này có thể tham khảo tại đường dẫn `https://docs.sonarqube.org/display/SONAR/Architecture+and+Integration`.
+SonarQube là một nền tảng thanh soát chất lượng mã nguồn, hoạt động theo mô hình Client/Server. Việc thanh soát diễn ra ở client (máy của học viên, máy Runner của hệ thống CI,...) và báo cáo được gửi lên và kiểm soát tập trung ở SonarQube Server. Chi tiết về kiến trúc này có thể tham khảo tại đường dẫn [https://docs.sonarqube.org/display/SONAR/Architecture+and+Integration](https://docs.sonarqube.org/display/SONAR/Architecture+and+Integration).
 
 ![](./images/01.png){ width=100% }
 
@@ -39,64 +40,9 @@ Chuẩn bị một SonarQube Server là cần thiết trước khi chuyển sang
 
 SonarQube Server sử dụng Elastic Search, nên môi trường chạy nó nên có dư tối thiểu 1GB RAM - khuyến nghị là 2GB. IP của server cần phải có khả năng truy cập được từ cả phía CI Runners lẫn PC của học viên.
 
-SQ Server có thể được cài đặt trọn gói thông qua docker. Sau đây là một cặp file cấu hình docker dựng sẵn, chú ý thay tham số `$PORT` bằng port muốn sử dụng.
+SQ Server có thể được cài đặt trọn gói thông qua docker. Sử dụng repository ở đường dẫn [https://github.com/codegymlabs/sonarqube](https://github.com/codegymlabs/sonarqube) và làm theo hướng dẫn cài đặt.
 
-```dockerfile
-# app.dockerfile
-FROM sonarqube:alpine
-
-RUN apk update && apk add jq curl
-
-RUN wget $(curl -s https://api.github.com/repos/kogitant/sonar-slack-notifier-plugin/releases/latest | jq -r ".assets[] | select(.name | test(\"${spruce_type}\")) | .browser_download_url") -P /opt/sonarqube/extensions/plugins/plugins/sonar-slack-notifier-plugin/
-```
-
-```yaml
-# docker-compose.yml
-version: "2"
-
-services:
-  sonarqube:
-    image: sonarqube:alpine
-    ports:
-      - $PORT:9000
-    networks:
-      - sonarnet
-    environment:
-      - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
-    volumes:
-      - sonarqube_conf:/opt/sonarqube/conf
-      - sonarqube_data:/opt/sonarqube/data
-      - sonarqube_extensions:/opt/sonarqube/extensions
-      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
-
-  db:
-    image: postgres:alpine
-    networks:
-      - sonarnet
-    environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-
-networks:
-  sonarnet:
-    driver: bridge
-
-volumes:
-  sonarqube_conf:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_bundled-plugins:
-  postgresql:
-  postgresql_data:
-
-```
-
-Để sử dụng được, trên host phải có cài đặt sẵn docker executable và docker-compose executable, mở sẵn `$PORT` ở firewall, tạo một thư mục mới với file docker-compose.yml có nội dung như trên. Đứng ở thư mục đó và sử dụng lệnh `docker-compose up -d`  để bật SQ Server.
-
-Xác nhận SQ Server đã được bật và hoạt động ổn định bằng cách vào `http://server-address:$PORT`. Đăng nhập lần đầu tiên với username và password đều là admin.
+Xác nhận SQ Server đã được bật và hoạt động ổn định bằng cách truy cập đường dẫn [http://server-address:$PORT](http://server-address:$PORT). Đăng nhập lần đầu tiên với username và password đều là admin.
 
 ##### b. Cấu hình permission cho các group user của SonarQube Server
 
@@ -159,13 +105,13 @@ Sau khi runner đã được đăng ký, nếu có một commit của học viê
 
 Mặc dù việc thanh soát sẽ được cấu hình để thực hiện tự động, học viên có thể thực thi việc này thủ công bằng cách cài đặt công cụ SonarQube Scanner. Nếu không có nhu cầu, học viên có thể bỏ qua bước này. Việc cài đặt này chỉ cần thực hiện một lần.
 
-SonarQube Scanner là một chương trình viết bằng ngôn ngữ Java, do đó phải xác nhận rằng trên máy tính của học viên đã có Java Runtime Environment được cài đặt thành công (nếu học viên chưa có, download tại đường dẫn `http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html`).
+SonarQube Scanner là một chương trình viết bằng ngôn ngữ Java, do đó phải xác nhận rằng trên máy tính của học viên đã có Java Runtime Environment được cài đặt thành công (nếu học viên chưa có, download tại đường dẫn [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html)).
 
 Sau khi cài đặt JDK, mở cmd (hoặc một shell session trên linux/unix) và dùng lệnh `java -version` để kiểm tra. Nếu kết quả tương tự như dưới đây thì bạn đã sẵn sàng cho bước tiếp theo: 
 
 ![](./images/04.png){ width=100% }
 
-Download công cụ SonarQube Scanner tại đường dẫn `https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner`. Chọn một thư mục để giải nén vào, tạm gọi là `$INSTALL_DIR`. Ở bước tiếp theo ta cần nạp sonar-scanner vào `PATH` của hệ thống.
+Download công cụ SonarQube Scanner tại đường dẫn [https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner). Chọn một thư mục để giải nén vào, tạm gọi là `$INSTALL_DIR`. Ở bước tiếp theo ta cần nạp sonar-scanner vào `PATH` của hệ thống.
 
 ##### a. Trên Windows
 
@@ -207,7 +153,7 @@ Với stack này, việc chạy sonarqube scanner được thực hiện tự đ
 
 ##### a. Đặc tả nhiệm vụ cho Gitlab CI Runner
 
-Ta cần đặc tả để CI Runner sẽ thực thi sonar-scanner. Ở thư mục gốc của project, tạo file `.gitlab-ci.yml` với nội dung như sau:
+Ta cần đặc tả những jobs mà CI Runner sẽ thực thi. Tải file `.gitlab-ci.yml` từ địa chỉ [https://goo.gl/BRQTcd](https://goo.gl/BRQTcd) vào thư mục gốc của project, nội dung file đó sẽ tương tự như sau:
 
 ```yaml
 qualitycheck:
@@ -221,11 +167,11 @@ qualitycheck:
     - docker run -v $PWD:/root/src binhsonnguyen/sonarqube-scanner
 ```
 
-Giáo viên/quản trị viên sẽ giúp các bạn đính một runner vào repository ở gitlab.com. Runner đó sẽ chạy hai tác vụ được mô tả ở mục script, trong đó tác vụ thứ hai là sử dụng sonar-scanner để thanh soát mã trên project của bạn (theo đặc tả được bạn mô tả ở bước trước).
+Như bạn thấy, script trên đây đặc tả cho runner chạy sonarscanner. Bước tiếp theo, chúng ta đảm bảo job đó thực thi thành công.
 
 ##### b. Cấu hình SonarQube Scanner
 
-Để bất cứ instance nào của sonarscanner (dù ở môi trường của học viên hay ở trong runner) cũng đều cần có đặc tả về project để thực hiện được nhiệm vụ của nó. Sau đây là các bước tạo ra đặc tả này:
+Bất cứ instance nào của sonarscanner (dù ở môi trường của học viên hay ở trong runner) cũng đều cần có đặc tả về project để thực hiện được nhiệm vụ của nó. Sau đây là các bước tạo ra đặc tả này:
 
 __Nhận project token__
 
@@ -233,7 +179,7 @@ Học viên sẽ nhận project Token từ giáo viên/quản trị viên, hoặ
 
 __Đặc tả project cho SonarQube Scanner__
 
-Ở bước này, ta viết file cấu hình để chỉ dẫn cho sonar-scanner thanh soát project. Ở thư mục gốc của project, tạo file sonar-project.properties với nội dung như sau (chú ý thay phần chữ in đậm bằng các giá trị thật):
+Ở bước này, ta viết file cấu hình để chỉ dẫn cho sonar-scanner thanh soát project. Ở thư mục gốc của project, tạo file `sonar-project.properties` từ địa chỉ [https://goo.gl/WW7pkS](https://goo.gl/WW7pkS) với nội dung như sau (chú ý thay phần chữ in đậm bằng các giá trị thật):
 
 ```text
 # key và token được giáo viên cung cấp, hoặc xem trên SonarQube Server
@@ -263,6 +209,8 @@ sonar.exclusions=app/Providers/**
 
 Nếu bạn chạy sonar-scanner một cách thủ công, thì một thư mục tên `ci` sẽ tự động được tạo ra. Có thể liệt kê thư mục đó vào file .gitignore.
 
+\pagebreak
+
 II. Tích hợp Gitlab/PivotalTracker
 ---
 
@@ -278,7 +226,7 @@ Sau đây là cách thực hiện.
 
 Lưu ý: việc trao token này cho Gitlab sẽ làm cho Gitlab Webhook có toàn quyền trên những issue/feature/story mà tài khoản PivotalTracker này có quyền hạn. Do đó, hành dụng ưu việt nhất là tạo một tài khoản PivotalTracker chỉ có quyền hạn trên một project duy nhất, và sử dụng API Token của tài khoản đó.
 
-Token API của PivotalTracker có thể được truy cập ở mục profile: `https://www.pivotaltracker.com/profile`
+Token API của PivotalTracker có thể được truy cập ở mục profile: [https://www.pivotaltracker.com/profile](https://www.pivotaltracker.com/profile)
 
 ![](./images/10.png){ width=100% }
 
@@ -318,6 +266,8 @@ Ví dụ, với story trên, commit có nội dung như sau:
 ![](./images/16.png){ width=100% }
 
 Lưu ý: đối với PivotalTracker, trạng thái của issue/feature/story chỉ có ý nghĩa khi issue/featue/story đó đã được “Start”. Luật tương tự cũng được áp dụng cho Webhook. Do đó, các message mang `#TRACKER_STORY_ID` chỉ có ý nghĩa trên những story đã được Started.
+
+\pagebreak
 
 III. Tích hợp SonarQube/Slack
 ---
@@ -366,11 +316,11 @@ Lưu ý: tại thời điểm viết tài liệu này, Slack Incoming Webhook đ
 
 ![](./images/22.png){ width=100% }
 
-Tham khảo thêm về imcoming webhooks tại `https://api.slack.com/incoming-webhooks/`
+Tham khảo thêm về imcoming webhooks tại [https://api.slack.com/incoming-webhooks/](https://api.slack.com/incoming-webhooks/)
 
 ### B. Cấu hình để SonarQube Plugin sử dụng Incoming Webhook
 
-Đăng nhập SonarQube Server bằng tài khoản có quyền admin, mở panel “Administration/Configuration/General”, xác nhận rằng cấu hình `Base URL` đã được thiết đặt (ví dụ: `https://sonarqube.codegym.vn`):
+Đăng nhập SonarQube Server bằng tài khoản có quyền admin, mở panel “Administration/Configuration/General”, xác nhận rằng cấu hình `Base URL` đã được thiết đặt (ví dụ: [https://sonarqube.codegym.vn](https://sonarqube.codegym.vn)):
 
 ![](./images/23.png){ width=100% }
 
@@ -381,6 +331,8 @@ Mở panel “Administration/Configuration/Slack”, enable plugin, nhập Slack
 Kết quả của việc cấu hình này là một notifications sẽ được post lên chanel đã được cấu hình, mỗi khi sonar-scanner thực hiện thành công một lần scan:
 
 ![](./images/25.png){ width=100% }
+
+\pagebreak
 
 IV. Tích hợp PivotalTracker/Slack
 ---
