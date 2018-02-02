@@ -19,6 +19,14 @@ này.
 - Các thay đổi trạng thái trên PivotalTracker Project sẽ được thông báo vào một chanel xác định trong Slack Workspace
 - Việc tích hợp Gitlab với Slack không được khuyến khích trong Stack này vì sẽ gây ra dư thừa notifications.
 
+Một stack mẫu đã được publish cho viewer tại những địa chỉ sau:
+
+Dự án PivotalTracker: https://www.pivotaltracker.com/projects/2146102
+
+Repository ở Gitlab: https://gitlab.com/codegymlabs/scratch
+
+Dự án ở SonarQube Server: [http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb](http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb)
+
 I. Tích hợp Gitllab/SonarQube
 ---
 
@@ -377,3 +385,7 @@ Tại PivotalTracker, vào project Settings/Webhook, nhập Webhook URL đã có
 Kết quả của việc này là một message sẽ được post lên chanel chỉ định mỗi khi có sự thay đổi trạng thái trên PivotalTracker Project:
 
 ![](./images/31.png){ width=100% }
+
+[project-on-sonarserver]: http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb
+[project-on-gitlab]: https://gitlab.com/codegymlabs/scratch
+[project-on-pivotal-tracker]: https://www.pivotaltracker.com/projects/2146102
