@@ -7,7 +7,7 @@ mkdir -p out/html
 docker run --rm \
   -v $PWD:/docs \
   -v $PWD/out:/docs/out \
-  codegymlabs/pandoc:pdf-beta \
+  codegymlabs/pandoc:core \
   -t html5 \
   --css pandoc.css \
   pivotaltracker-gitlab-sonarqube-slack.md \
