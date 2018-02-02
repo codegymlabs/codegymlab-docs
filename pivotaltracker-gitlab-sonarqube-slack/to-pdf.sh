@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+mkdir -p out/pdf
+
 docker run --rm \
   -v $PWD:/docs \
-  -v $PWD/outs:/docs/out \
+  -v $PWD/out:/docs/out \
   codegymlabs/pandoc:pdf \
   pivotaltracker-gitlab-sonarqube-slack.md \
-  -o out/o.pdf \
+  -o out/pdf/`date '+%Y%m%dT%H%M%S'`.pdf \
   -V papersize:a4 \
   --latex-engine=xelatex \
-  --dpi=144
+  --dpi=144 \
+  --toc
