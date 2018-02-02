@@ -21,11 +21,11 @@ này.
 
 Một stack mẫu đã được publish cho viewer tại những địa chỉ sau:
 
-Dự án PivotalTracker: https://www.pivotaltracker.com/projects/2146102
+Dự án PivotalTracker: [https://goo.gl/RVQMML](https://www.pivotaltracker.com/projects/2146102)
 
-Repository ở Gitlab: https://gitlab.com/codegymlabs/scratch
+Repository ở Gitlab: [https://goo.gl/NonjDo](https://gitlab.com/codegymlabs/scratch)
 
-Dự án ở SonarQube Server: [http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb](http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb)
+Dự án ở SonarQube Server: [https://goo.gl/ooTeH2](http://scrumlab.agilead.vn:1051/dashboard?id=scratch%3A3-aXYiELM7mw94vb)
 
 I. Tích hợp Gitllab/SonarQube
 ---
@@ -113,13 +113,13 @@ Sau khi runner đã được đăng ký, nếu có một commit của học viê
 
 Mặc dù việc thanh soát sẽ được cấu hình để thực hiện tự động, học viên có thể thực thi việc này thủ công bằng cách cài đặt công cụ SonarQube Scanner. Nếu không có nhu cầu, học viên có thể bỏ qua bước này. Việc cài đặt này chỉ cần thực hiện một lần.
 
-SonarQube Scanner là một chương trình viết bằng ngôn ngữ Java, do đó phải xác nhận rằng trên máy tính của học viên đã có Java Runtime Environment được cài đặt thành công (nếu học viên chưa có, download tại đường dẫn [http://www.oracle.com/technetwork/java/javase/downloads/index.html](http://www.oracle.com/technetwork/java/javase/downloads/index.html)).
+SonarQube Scanner là một chương trình viết bằng ngôn ngữ Java, do đó phải xác nhận rằng trên máy tính của học viên đã có Java Runtime Environment được cài đặt thành công (nếu học viên chưa có, download tại đường dẫn [https://goo.gl/zXjC](http://www.oracle.com/technetwork/java/javase/downloads/index.html)).
 
 Sau khi cài đặt JDK, mở cmd (hoặc một shell session trên linux/unix) và dùng lệnh `java -version` để kiểm tra. Nếu kết quả tương tự như dưới đây thì bạn đã sẵn sàng cho bước tiếp theo: 
 
 ![](./images/04.png){ width=100% }
 
-Download công cụ SonarQube Scanner tại đường dẫn [https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner). Chọn một thư mục để giải nén vào, tạm gọi là `$INSTALL_DIR`. Ở bước tiếp theo ta cần nạp sonar-scanner vào `PATH` của hệ thống.
+Download công cụ SonarQube Scanner tại đường dẫn [https://goo.gl/cH7B4F](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner). Chọn một thư mục để giải nén vào, tạm gọi là `$INSTALL_DIR`. Ở bước tiếp theo ta cần nạp sonar-scanner vào `PATH` của hệ thống.
 
 ##### a. Trên Windows
 
