@@ -5,5 +5,4 @@ qualitycheck:
   services:
     - docker:dind
   script:
-    - docker pull binhsonnguyen/sonarqube-scanner
     - docker run -v $PWD:/root/src binhsonnguyen/sonarqube-scanner
